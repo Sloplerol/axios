@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.2.2/axios.min.js"></script>
+</head>
+
+<body>
+    <script>
+
+        // config为配置对象 可以在请求的时候在请求拦截器内添加多余配置
+        axios.interceptors.request.use(function (config) {
+            console.log('请求拦截器1 成功');
+            // config.params = {id: 1000}
+            config.timeout = 2000;
+            return config
+            //这一步请求拦截器为成功 响应拦截器为失败
+        }, function (error) {
+            console.log('请求拦截器1 失败');
+            return Promise.reject(error);
+        });
+
+        
+        axios.interceptors.request.use(function (config) {
+            console.log('请求拦截器2 成功');
+            return config
+            //这一步请求拦截器为成功 响应拦截器为失败
+        }, function (error) {
+            console.log('请求拦截器2 失败');
+            return Promise.reject(error);
+        });
+
+        // response是axios默认情况下返回的形式
+        axios.interceptors.response.use(function (response) {
+
+            console.log('响应拦截器1 成功');
+            // 可以单独抽离出来response内部某个属性所返回的结果
+            return response.data;
+        }, function (error) {
+            console.log('响应拦截器1 失败');
+            return Promise.reject(error);
+        });
+
+        
+        axios.interceptors.response.use(function (response) {
+
+            console.log('响应拦截器2 成功');
+            
+            return response;
+        }, function (error) {
+            console.log('响应拦截器2 失败');
+            return Promise.reject(error);
+        });
+
+        // 设置两个请求拦截器和响应拦截器结果为请求2 请求1 响应1 响应2
+        axios.get('http://localhost:3000/posts').then(response=>{
+            console.log(response);
+        }).catch(reason=>{
+            console.log(reason);
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.2.2/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>欢迎学习axios</h1>
+        <hr>
+        <button>发送GET请求</button>
+        <button>发送POST请求</button>
+        <button>发送PUT请求</button>
+        <button>发送DELETE请求</button>
+    </div>
+    <script>
+        const btn = document.querySelectorAll('button');
+        btn[0].addEventListener('click',function(){
+            //axios发送get请求
+            axios.request({
+                method: 'GET',
+                url: 'http://localhost:3000/comments'
+                
+            }).then(response=>{
+                console.log(response);
+            })
+        })
+        btn[1].addEventListener('click',function(){
+            axios.post(
+                // post请求配置项可选
+                'http://localhost:3000/comments',
+                {
+                    "body": "这是一条新增的数据",
+                    "postId": 2
+                }
+            ).then(response=>{
+                    console.log(response);
+            })
+        })
+    </script>
+</body>
+</html>

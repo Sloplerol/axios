@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // axios构造函数
+        function Axios(config){
+            this.defaults = config;
+            this.interceptors = {
+                request: {},
+                response: {}
+            }
+        }
+        // 往构造函数原型对象身上添加方法
+        Axios.prototype.request = function(config){
+            console.log('发送AJAX请求' + config.method);
+        }
+        Axios.prototype.get = function(config){
+            return this.request({method: 'GET'});
+        }
+        Axios.prototype.post = function(config){
+            return this.request({method: 'POST'});
+        }
+        
+        // 定义一个创建instance的函数
+        function createInstance(){
+            // 创建一个构造函数的实例对象
+            const res = new Axios();
+            //创建请求函数
+            const instance = Axios.prototype.request.bind(res);
+            // 将Axios原型对象上的方法添加到instance中
+            Object.keys(Axios.prototype).forEach(key=>{
+                instance[key] = Axios.prototype[key].bind(res);
+            })
+            // 将Axios构造函数身上的方法添加到instance身上
+            Object.keys(res).forEach(key=>{
+                instance[key] = res[key];
+            })
+            // console.dir(instance);
+            return instance;
+        }
+        let axios = createInstance();
+        //函数形式写法
+        // axios({method: 'GET'});
+        // 对象形式写法
+        axios.get({method: 'GET'})
+    </script>
+</body>
+</html>
